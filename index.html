@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>NRW JobScanner</title>
+
+<style>
+  body { background:#121212; color:white; font-family:Arial; padding:20px; }
+  button { background:#333; padding:12px; border:none; border-radius:6px; color:white; }
+</style>
+</head>
+
+<body>
+
+<h2>NRW JobScanner</h2>
+<p>Kaufmännische Jobs – Köln & Leverkusen</p>
+
+<button id="sub">Push aktivieren</button>
+
+<script>
+async function subscribe() {
+  const reg = await navigator.serviceWorker.register("sw.js");
+  const sub = await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: "<DEIN_PUBLIC_KEY>"
+  });
+
+  await fetch("/subscribe", {
+    method: "POST",
+    headers: { "content-type":"application/json" },
+    body: JSON.stringify(sub)
+  });
+
+  alert("Push aktiviert!");
+}
+
+document.getElementById("sub").onclick = subscribe;
+</script>
+
+</body>
+</html>
